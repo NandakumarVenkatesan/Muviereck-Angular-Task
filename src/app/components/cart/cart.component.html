@@ -1,0 +1,93 @@
+<ng-container *ngIf="products.length !==0">
+    <div class="container">
+        <div class="card-table">
+            <div class="cart-product">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Product Name</th>
+                            <th>Product Image</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of products; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{item.name}}</td>
+                            <td><img class="image-size" src="{{item.image}}" alt=""></td>
+                            <td class="width-25">{{item.description}}</td>
+                            <th class="width-12">₹{{item.variants[0].price}}</th>
+                            <td class="width-12">
+                                <div class="input-group">
+                                    <input type="number" step="1" min="0" max="100"
+                                        [(ngModel)]="item.variants[0].quantity" value="item.variants[0].quantity"
+                                        name="quantity" class="w-50" (keyup)="inputChange($event, item)"
+                                        (keydown)="quantityChange($event)" (mouseleave)="inputChange($event, item)"
+                                        (blur)="inputChange($event, item)">
+                                </div>
+
+                            </td>
+                            <td class="width-12">₹{{item.variants[0].total}}</td>
+                            <td>
+                                <button (click)="removeItem(item)" class="btn btn-danger"><i
+                                        class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td><button (click)="emptycart()" class="btn btn-danger">Empty Cart</button></td>
+                            <td><button routerLink="/products" class="btn btn-primary">Shop More</button></td>
+                            <td><button class="btn btn-success" (click)="downloadAsPDF()">Invoice</button></td>
+                            <td><strong>Grand Total : ₹{{grandTotal}}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="products.length === 0">
+    <div class="container">
+        <div class="card">
+            <h5 class="card-title">My Cart</h5>
+        </div>
+        <div class="center">
+            <h4>Your cart is empty!</h4>
+            <h6>Add item to it now</h6>
+            <button routerLink="/products" class="btn btn-primary">Shop Now</button>
+        </div>
+    </div>
+</ng-container>
+
+<div class="display">
+    <div class="container table-align" id="pdfTable" #pdfTable>
+        <h5 class="text-align">{{name}}</h5>
+        <table class="table table-font">
+            <thead class="table-light">
+                <tr class="table-font">
+                    <th class="width-75">S.No</th>
+                    <th class="width-200">Product Name</th>
+                    <th class="width-130">Price</th>
+                    <th class="width-75">Quantity</th>
+                    <th class="width-130">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of products; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>${{item.variants[0].price}}</td>
+                    <td>{{item.variants[0].quantity}}</td>
+                    <td>${{item.variants[0].total}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="table-font"><strong>Grand Total : ${{grandTotal}}</strong></p>
+    </div>
+</div>
